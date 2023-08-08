@@ -10,6 +10,9 @@ import time
 import torch
 import uuid
 import win32api
+import win32con
+import win32gui
+import win32api
 
 from termcolor import colored
 
@@ -57,25 +60,25 @@ class Aimbot:
         sens_config = json.load(f)
     aimbot_status = colored("ENABLED", 'green')
 
-    def __init__(self, box_constant = 410, collect_data = False, mouse_delay = 0.0001, debug = False):
+    def __init__(self, box_constant = 370, collect_data = False, mouse_delay = 0.0001, debug = False):
         #controls the initial centered box width and height of the "Hyper Aim" window
         self.box_constant = box_constant #controls the size of the detection box (equaling the width and height)
 
         print("[INFO] Loading the neural network model")
-        self.model = torch.hub.load('ultralytics/yolov5', 'custom', path='lib/best.pt', force_reload = True)
+        self.model = torch.hub.load('ultralytics/yolov3', 'custom', path='lib/best.pt', force_reload = True)
         if torch.cuda.is_available():
             print(colored("CUDA ACCELERATION [ENABLED]", "green"))
         else:
             print(colored("[!] CUDA ACCELERATION IS UNAVAILABLE", "red"))
             print(colored("[!] Check your PyTorch installation, else performance will be poor", "red"))
 
-        self.model.conf = 0.67 # base confidence threshold (or base detection (0-1)
-        self.model.iou = 0.67 # NMS IoU (0-1)
+        self.model.conf = 0.72 # base confidence threshold (or base detection (0-1)
+        self.model.iou = 0.72 # NMS IoU (0-1)
         self.collect_data = collect_data
         self.mouse_delay = mouse_delay
         self.debug = debug
 
-        print("\n[INFO] PRESS 'g' TO TOGGLE AIMBOT\n[INFO] PRESS 'F2' TO QUIT")
+        print("\n[INFO] PRESS 'r' TO TOGGLE AIMBOT\n[INFO] PRESS 'F2' TO QUIT")
 
     def update_status_aimbot():
         if Aimbot.aimbot_status == colored("ENABLED", 'green'):
@@ -210,6 +213,9 @@ class Aimbot:
             
             cv2.putText(frame, f"FPS: {int(1/(time.perf_counter() - start_time))}", (5, 30), cv2.FONT_HERSHEY_DUPLEX, 1, (113, 116, 244), 2)
             cv2.imshow("Hyper AIM", frame)
+            # hWnd = win32gui.FindWindow(None, 'Hyper AIM')
+            # win32gui.SetWindowPos(hWnd, win32con.HWND_TOPMOST, 0, 0, 0, 0,
+            # win32con.SWP_SHOWWINDOW | win32con.SWP_NOSIZE | win32con.SWP_NOMOVE)
             if cv2.waitKey(1) & 0xFF == ord('0'):
                 break
 

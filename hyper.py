@@ -9,7 +9,7 @@ from termcolor import colored
 
 def on_release(key):
     try:
-        if key == keyboard.KeyCode.from_char("g"):
+        if key == keyboard.KeyCode.from_char("r"):
             Aimbot.update_status_aimbot()
         if key == keyboard.Key.f2:
             Aimbot.clean_up()
