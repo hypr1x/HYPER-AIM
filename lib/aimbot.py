@@ -57,7 +57,7 @@ class Aimbot:
         sens_config = json.load(f)
     aimbot_status = colored("ENABLED", 'green')
 
-    def __init__(self, box_constant = 350, collect_data = False, mouse_delay = 0.0001, debug = False):
+    def __init__(self, box_constant = 410, collect_data = False, mouse_delay = 0.0001, debug = False):
         #controls the initial centered box width and height of the "Hyper Aim" window
         self.box_constant = box_constant #controls the size of the detection box (equaling the width and height)
 
@@ -69,8 +69,8 @@ class Aimbot:
             print(colored("[!] CUDA ACCELERATION IS UNAVAILABLE", "red"))
             print(colored("[!] Check your PyTorch installation, else performance will be poor", "red"))
 
-        self.model.conf = 0.7 # base confidence threshold (or base detection (0-1)
-        self.model.iou = 0.7 # NMS IoU (0-1)
+        self.model.conf = 0.67 # base confidence threshold (or base detection (0-1)
+        self.model.iou = 0.67 # NMS IoU (0-1)
         self.collect_data = collect_data
         self.mouse_delay = mouse_delay
         self.debug = debug
@@ -112,7 +112,8 @@ class Aimbot:
         if Aimbot.is_targeted():
             scale = Aimbot.sens_config["targeting_scale"]
         else:
-            return #TODO
+            scale = Aimbot.sens_config["xy_scale"]
+            # return #TODO
 
         if self.debug: start_time = time.perf_counter()
         for rel_x, rel_y in Aimbot.interpolate_coordinates_from_center((x, y), scale):
